@@ -1,12 +1,22 @@
 package com.bombgpt.mapper;
 
+import com.bombgpt.entity.Faq;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
-import java.util.Map;
 
+@Mapper
 public interface FaqMapper {
 
     @Select("select * from faq")
-    List<Map<String, Object>> list();
+    List<Faq> list();
+
+    @Select("""
+            select * from faq
+            where question like concat('%', #{keyword}, '%')
+               or answer like concat('%', #{keyword}, '%')
+            limit 5
+            """)
+    List<Faq> searchByKeyword(String keyword);
 }

@@ -1,25 +1,23 @@
 package com.bombgpt.controller;
 
+import com.bombgpt.common.Result;
+import com.bombgpt.entity.Faq;
 import com.bombgpt.mapper.FaqMapper;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
-import java.util.Map;
 
+@CrossOrigin
 @RestController
-@RequestMapping("/faq")
 public class FaqController {
 
-    private final FaqMapper faqMapper;
+    @Autowired
+    private FaqMapper faqMapper;
 
-    public FaqController(FaqMapper faqMapper) {
-        this.faqMapper = faqMapper;
-    }
-
-    @GetMapping("/list")
-    public List<Map<String, Object>> list() {
-        return faqMapper.list();
+    @GetMapping("/faq/list")
+    public Result<List<Faq>> list() {
+        return Result.success(faqMapper.list());
     }
 }
