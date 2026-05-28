@@ -2,29 +2,28 @@ package com.bombgpt.controller;
 
 import com.bombgpt.common.Result;
 import com.bombgpt.service.DeepSeekService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
+@Tag(name = "AI问答接口")
 @RestController
 @RequestMapping("/question")
 public class QuestionController {
 
     private final DeepSeekService deepSeekService;
 
-    // 构造器注入
     public QuestionController(DeepSeekService deepSeekService) {
         this.deepSeekService = deepSeekService;
     }
 
+    @Operation(summary = "校园智能问答")
     @GetMapping("/ask")
-    public Result<String> ask(@RequestParam("question") String question) {
-
-        String answer = deepSeekService.chat(question);
-
+    public Result<String> ask(
+            @RequestParam("question") String question,
+            @RequestParam(value = "deep", defaultValue = "false") Boolean deep
+    ) {
+        String answer = deepSeekService.chat(question, deep);
         return Result.success(answer);
     }
 }
